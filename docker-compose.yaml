@@ -1,0 +1,20 @@
+services:
+  application:
+    build: .
+    container_name: "application"
+    ports:
+      - "5070:5050"
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+
+  postgres:
+    image: postgres:18-bookworm
+    container_name: "postgres"
+    env_file:
+      - .env
+    volumes:
+      - ./out/pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
