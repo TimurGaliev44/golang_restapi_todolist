@@ -23,6 +23,10 @@ func New(create CreateUser, logger *zap.Logger) http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
+		if err := user.ValidateToCreateUser(); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
 
 		if err := create.RegisterUser(r.Context(), user); err != nil {
 			if errors.Is(err, appErrors.ErrUserAlreadyExists) {

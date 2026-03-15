@@ -7,12 +7,12 @@ type TaskDTO struct {
 	Description string `json:"description"`
 }
 
-func (u *UserDTO) ValidateToCreateTask() error {
-	if u.Username == "" {
-		return errors.New("username is empty")
+func (t *TaskDTO) ValidateToCreateTask() error {
+	if t.Title == "" {
+		return errors.New("title is empty")
 	}
-	if u.Password == "" {
-		return errors.New("password is empty")
+	if t.Description == "" {
+		return errors.New("description is empty")
 	}
 	return nil
 }
