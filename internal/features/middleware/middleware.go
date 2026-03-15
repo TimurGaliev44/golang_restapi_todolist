@@ -2,10 +2,7 @@ package middleware
 
 import (
 	"context"
-	"errors"
-	appErrors "main/internal/core/errors"
 	"main/internal/core/jwt"
-	"main/internal/features/dto"
 	"net/http"
 	"strings"
 )
@@ -24,12 +21,7 @@ func Auth(next http.Handler) http.Handler {
 		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
 		claims, err := jwt.ValidateToken(tokenString)
 		if err != nil {
-			errDTO := dto.CreateNewError(err)
-			if errors.Is(err, appErrors.ErrInvalidJWT) {
-				http.Error(w, errDTO.ToString(), http.StatusUnauthorized)
-				return
-			}
-			http.Error(w, errDTO.ToString(), http.StatusInternalServerError)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		ctx := context.WithValue(r.Context(), UserIDKey, claims.UserID)
