@@ -8,13 +8,10 @@ import (
 	"main/internal/features/todo"
 	"os"
 
-	"github.com/joho/godotenv"
+	"go.uber.org/zap"
 )
 
 func main() {
-	if err := godotenv.Load(); err != nil {
-		panic(err)
-	}
 	if err := os.MkdirAll("out/logs", 0755); err != nil {
 		panic(err)
 	}
@@ -32,11 +29,12 @@ func main() {
 	ctx := context.Background()
 	db, err := postgres.Connect(ctx)
 	if err != nil {
+		logger.Error("failed to connect storage", zap.Error(err))
 		panic(err)
 	}
 	td := todo.New(db)
-	handlers := server.NewHandlers(td, logger)
-	srv := server.NewServer(handlers)
+
+	srv := server.NewServer(td, logger)
 	if err := srv.StartServer(); err != nil {
 		panic(err)
 	}
