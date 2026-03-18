@@ -9,6 +9,8 @@ services:
         condition: service_healthy
       migrate:
         condition: service_completed_successfully
+      redis:
+        condition: service_started
     env_file:
       - .env
 
@@ -37,3 +39,11 @@ services:
           condition: service_healthy
       env_file:
         - .env
+  
+  redis:
+    image: redis:8.6.1
+    container_name: redis
+    ports:
+      - "6379:6379"
+    env_file:
+      - .env
