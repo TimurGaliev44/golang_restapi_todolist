@@ -30,7 +30,7 @@ func New(create CreateTask, logger *zap.Logger) http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		if err := task.ValidateToCreateUser(); err != nil {
+		if err := taskDTO.ValidateToCreateTask(); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
